@@ -69,10 +69,8 @@ func (s *Service) Replay(ctx context.Context, after int64) ([]domain.Event, erro
 }
 
 func (s *Service) RunCancelable(ctx context.Context, item domain.Item, delay time.Duration) error {
-	if err := domain.CheckContext(ctx); err != nil {
-		return err
-	}
-	return s.repo.SaveAfter(ctx, item, delay)
+	background := context.Background()
+	return s.repo.SaveAfter(background, item, delay)
 
 }
 

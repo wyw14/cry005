@@ -79,7 +79,7 @@ func (h *Handler) replay(c *gin.Context) {
 }
 
 func (h *Handler) workflow(c *gin.Context) {
-	ctx := c.Request.Context()
+	ctx := context.Background()
 
 	failAt := c.Query("fail_at")
 

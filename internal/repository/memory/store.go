@@ -109,13 +109,7 @@ func (s *Store) Replay(ctx context.Context, after int64) ([]domain.Event, error)
 }
 
 func (s *Store) SaveAfter(ctx context.Context, item domain.Item, delay time.Duration) error {
-	timer := time.NewTimer(delay)
-	defer timer.Stop()
-	select {
-	case <-ctx.Done():
-		return ctx.Err()
-	case <-timer.C:
-	}
+	time.Sleep(delay)
 
 	if err := domain.CheckContext(ctx); err != nil {
 		return err
