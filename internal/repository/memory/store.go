@@ -43,7 +43,18 @@ func (s *Store) ListAll(ctx context.Context) ([]domain.Item, error) {
 }
 
 func (s *Store) ListVisible(ctx context.Context, scope string) ([]domain.Item, error) {
-	return s.ListAll(ctx)
+	if err := domain.CheckContext(ctx); err != nil {
+		return nil, err
+	}
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]domain.Item, 0)
+	for _, item := range s.items {
+		if item.Scope == scope {
+			out = append(out, item)
+		}
+	}
+	return out, nil
 
 }
 

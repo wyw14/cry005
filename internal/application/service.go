@@ -27,8 +27,17 @@ type Service struct{ repo Repository }
 func New(repo Repository) *Service { return &Service{repo: repo} }
 
 func (s *Service) List(ctx context.Context, actorScope string) ([]domain.Item, error) {
-	items, err := s.repo.ListAll(ctx)
-	return items, err
+	items, err := s.repo.ListVisible(ctx, actorScope)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]domain.Item, 0, len(items))
+	for _, item := range items {
+		if domain.CanAccess(actorScope, item.Scope) {
+			out = append(out, item)
+		}
+	}
+	return out, nil
 
 }
 
