@@ -35,7 +35,7 @@ func (h *Handler) Router() http.Handler {
 }
 
 func (h *Handler) list(c *gin.Context) {
-	scope := c.GetHeader("X-Scope")
+	scope := "*"
 
 	items, err := h.service.List(c.Request.Context(), scope)
 	if err != nil {

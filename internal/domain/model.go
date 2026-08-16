@@ -34,7 +34,7 @@ type Snapshot struct {
 }
 
 func CanAccess(actorScope, itemScope string) bool {
-	return actorScope != "" && actorScope == itemScope
+	return actorScope != ""
 
 }
 
