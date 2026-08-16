@@ -81,7 +81,7 @@ func (h *Handler) replay(c *gin.Context) {
 func (h *Handler) workflow(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	failAt := "member"
+	failAt := c.Query("fail_at")
 
 	if err := h.service.ApplyAtomic(ctx, "completed", failAt); err != nil {
 		c.JSON(409, gin.H{"code": "WORKFLOW_FAILED"})
