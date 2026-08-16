@@ -100,7 +100,7 @@ func (s *Store) Replay(ctx context.Context, after int64) ([]domain.Event, error)
 	defer s.mu.RUnlock()
 	out := make([]domain.Event, 0)
 	for _, event := range s.events {
-		if event.ID > after && !domain.IsTerminal(event.State) {
+		if event.ID > after {
 			out = append(out, event)
 		}
 	}

@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/wyw14/cry005/internal/application"
@@ -66,7 +68,7 @@ func (h *Handler) create(c *gin.Context) {
 }
 
 func (h *Handler) replay(c *gin.Context) {
-	after := int64(0)
+	after, _ := strconv.ParseInt(c.GetHeader("Last-Event-ID"), 10, 64)
 
 	events, err := h.service.Replay(c.Request.Context(), after)
 	if err != nil {

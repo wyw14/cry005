@@ -44,7 +44,7 @@ func IdempotencyScope(scope, actor, operation, key string) string {
 }
 
 func IsTerminal(state string) bool {
-	return state == "completed" || state == "failed" || state == "cancelled" || state == "running"
+	return state == "completed" || state == "failed" || state == "cancelled"
 
 }
 
