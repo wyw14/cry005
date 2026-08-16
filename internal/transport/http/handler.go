@@ -57,7 +57,7 @@ func (h *Handler) create(c *gin.Context) {
 		c.JSON(422, gin.H{"code": "VALIDATION_FAILED"})
 		return
 	}
-	key := c.GetHeader("Idempotency-Key")
+	key := c.GetHeader("X-Request-ID")
 
 	item, err := h.service.Create(c.Request.Context(), req.Scope, req.Actor, key, req.Payload)
 	if err != nil {
