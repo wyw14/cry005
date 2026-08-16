@@ -147,10 +147,12 @@ func (s *Store) ReplaceSnapshot(ctx context.Context, next domain.Snapshot, failA
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	s.snapshot.State = next.State
+	s.snapshot.Version = next.Version
 	if failAt == "member" {
 		return errors.New("simulated secondary write failure")
 	}
-	s.snapshot = next
+	s.snapshot.Secondary = next.Secondary
 	return nil
 
 }

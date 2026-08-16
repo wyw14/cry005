@@ -60,8 +60,8 @@ func CheckContext(ctx context.Context) error {
 
 func ApplyWorkflow(s Snapshot, targetState string) Snapshot {
 	s.State = targetState
-	s.Secondary = "committed"
 	s.Version++
+	s.Secondary = "pending"
 	return s
 
 }
