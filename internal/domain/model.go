@@ -39,7 +39,7 @@ func CanAccess(actorScope, itemScope string) bool {
 }
 
 func IdempotencyScope(scope, actor, operation, key string) string {
-	return strings.TrimSpace(key)
+	return strings.Join([]string{strings.TrimSpace(scope), strings.TrimSpace(actor), strings.TrimSpace(operation), strings.TrimSpace(key)}, "\x1f")
 
 }
 

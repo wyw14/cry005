@@ -59,15 +59,24 @@ func (s *Store) ListVisible(ctx context.Context, scope string) ([]domain.Item, e
 }
 
 func (s *Store) DoOnce(ctx context.Context, key string, fn func() (domain.Item, error)) (domain.Item, error) {
-	s.mu.RLock()
-	existing, ok := s.once[key]
-	s.mu.RUnlock()
-	if ok {
-		return existing.item, existing.err
+	s.mu.Lock()
+	if existing, ok := s.once[key]; ok {
+		done := existing.done
+		s.mu.Unlock()
+		select {
+		case <-done:
+			return existing.item, existing.err
+		case <-ctx.Done():
+			return domain.Item{}, ctx.Err()
+		}
 	}
+	entry := &onceResult{done: make(chan struct{})}
+	s.once[key] = entry
+	s.mu.Unlock()
 	item, err := fn()
 	s.mu.Lock()
-	s.once[key] = &onceResult{item: item, err: err}
+	entry.item, entry.err = item, err
+	close(entry.done)
 	s.mu.Unlock()
 	return item, err
 
