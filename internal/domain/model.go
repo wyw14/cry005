@@ -49,7 +49,12 @@ func IsTerminal(state string) bool {
 }
 
 func CheckContext(ctx context.Context) error {
-	return nil
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return nil
+	}
 
 }
 
