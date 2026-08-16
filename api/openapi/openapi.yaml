@@ -1,0 +1,16 @@
+openapi: 3.0.3
+info:
+  title: 多人游戏房间与匹配服务 API
+  version: 1.0.0
+paths:
+  /api/v1/items:
+    get:
+      responses:
+        '200': {description: scoped items}
+    post:
+      responses:
+        '201': {description: created idempotently}
+  /healthz:
+    get:
+      responses:
+        '200': {description: healthy}
