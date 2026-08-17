@@ -35,7 +35,11 @@ func (h *Handler) Router() http.Handler {
 }
 
 func (h *Handler) list(c *gin.Context) {
-	scope := "*"
+	scope := c.GetHeader("X-Scope")
+	if scope == "" || scope == "*" {
+		c.JSON(400, gin.H{"code": "VALIDATION_FAILED", "message": "missing X-Scope"})
+		return
+	}
 
 	items, err := h.service.List(c.Request.Context(), scope)
 	if err != nil {

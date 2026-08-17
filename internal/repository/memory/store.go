@@ -43,8 +43,19 @@ func (s *Store) ListAll(ctx context.Context) ([]domain.Item, error) {
 }
 
 func (s *Store) ListVisible(ctx context.Context, scope string) ([]domain.Item, error) {
-	return s.ListAll(ctx)
-
+	if err := domain.CheckContext(ctx); err != nil {
+		return nil, err
+	}
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	out := make([]domain.Item, 0)
+	for _, item := range s.items {
+		if item.Scope == scope {
+			out = append(out, item)
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
+	return out, nil
 }
 
 func (s *Store) DoOnce(ctx context.Context, key string, fn func() (domain.Item, error)) (domain.Item, error) {

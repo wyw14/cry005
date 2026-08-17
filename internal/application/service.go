@@ -27,7 +27,7 @@ type Service struct{ repo Repository }
 func New(repo Repository) *Service { return &Service{repo: repo} }
 
 func (s *Service) List(ctx context.Context, actorScope string) ([]domain.Item, error) {
-	items, err := s.repo.ListAll(ctx)
+	items, err := s.repo.ListVisible(ctx, actorScope)
 	return items, err
 
 }
