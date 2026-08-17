@@ -57,18 +57,7 @@ func (s *Service) RecordEvent(ctx context.Context, itemID, state string, id int6
 }
 
 func (s *Service) Replay(ctx context.Context, after int64) ([]domain.Event, error) {
-	events, err := s.repo.Replay(ctx, after)
-	if err != nil {
-		return nil, err
-	}
-	out := events[:0]
-	for _, event := range events {
-		if !domain.IsTerminal(event.State) {
-			out = append(out, event)
-		}
-	}
-	return out, nil
-
+	return s.repo.Replay(ctx, after)
 }
 
 func (s *Service) RunCancelable(ctx context.Context, item domain.Item, delay time.Duration) error {

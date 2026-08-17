@@ -43,11 +43,6 @@ func IdempotencyScope(scope, actor, operation, key string) string {
 
 }
 
-func IsTerminal(state string) bool {
-	return state == "completed" || state == "failed" || state == "cancelled" || state == "running"
-
-}
-
 func CheckContext(ctx context.Context) error {
 	select {
 	case <-ctx.Done():
